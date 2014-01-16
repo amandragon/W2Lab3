@@ -25,7 +25,7 @@ post '/result' do
 search_str = params[:movie] #that gets back the movie we're requesting
 response= Typhoeus.get("www.omdbapi.com", :params=> {:s =>search_str})
 
-result=JSON.parse(response.body)
+result=JSON.parse(response.body) #creating object and passing response as an argument
 
 
   # Modify the html output so that a list of movies is provided.
@@ -48,7 +48,7 @@ end
 get '/poster/:imdb' do |imdb_id|
 id=params[:imdb]
 response_ID= Typhoeus.get("www.omdbapi.com", :params=> {:i =>id})
-result_ID=JSON.parse(response_ID.body)
+result_ID=JSON.parse(response_ID.body) #this means that the information is in the body
 
   # Make another api call here to get the url of the poster.
   html_str = "<html><head><title>Movie Poster</title></head><body><h1>Movie Poster</h1>\n"
