@@ -31,26 +31,33 @@ result=JSON.parse(response.body)
   # Modify the html output so that a list of movies is provided.
   html_str = "<html><head><title>Movie Search Results</title></head><body><h1>Movie Results</h1>\n<ul>"
  
-result["Search"].each {|movie_hash| 
- html_str += "<li>Title: #{movie_hash["Title"]}, Year: #{movie_hash["Year"]}</li>"
-}
+result["Search"].each do |movie_hash| 
+ html_str += "<a href='/poster/#{movie_hash["imdbID"]}'><li>Title: #{movie_hash["Title"]}, Year: #{movie_hash["Year"]}</li></a>"
+end
 
 #trying out the links:
 #result["Search"].each {|movie_hash| 
- #html_str += "<li>Title: #{movie_hash["Title"]}, Year: #{movie_hash["Year"]}</li>"
+ #html_str += "<li><a href="http://www.google.com/"> Title: #{movie_hash["Title"]}, Year: #{movie_hash["Year"]}/a></li>"
 #}
 
-#<a href="http://www.w3schools.com/"> way to get link 
 
 html_str += "</ul></body></html>"
 end 
 
 
 get '/poster/:imdb' do |imdb_id|
+id=params[:imdb]
+response_ID= Typhoeus.get("www.omdbapi.com", :params=> {:i =>id})
+result_ID=JSON.parse(response_ID.body)
+
   # Make another api call here to get the url of the poster.
   html_str = "<html><head><title>Movie Poster</title></head><body><h1>Movie Poster</h1>\n"
-  html_str = "<h3>#{imdb_id}</h3>"
+  html_str = "<h3><img src=#{result_ID["Poster"]}></h3>"
   html_str += '<br /><a href="/">New Search</a></body></html>'
-  #html_str = Typhoeus.get("www.imdb.com/images/M/#{imdb_id}", :params=> {:s =>search_str})
+  
+  #api call
+  #search_str = params[:movie]
+  #response= Typhoeus.get("www.omdbapi.com", :params=> {:i =>search_str})
+  #result=JSON.parse(response.body)
 
 end
